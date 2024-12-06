@@ -27,7 +27,7 @@ def access_token():
 
 def test_unauthorized_access(client):
     """Test accesing a protected route without a JWT."""
-    with client.application_app.context():
+    with client.application.app_context():
         response = client.get(url_for('notice.some_protected_route'))
     assert response.status_code == 401
     assert "로그인이 필요한 서비스입니다." in response.data('utf-8')
@@ -38,7 +38,7 @@ def test_authorized_access(client, access_token):
     headers = {
         "Authorization": f"Bearer {access_token}"
     }
-    with client.application_app.context():
+    with client.application.app_context():
         response = client.get(url_for('notice.some_protected_route'), headers=headers, follow_redirects=True)
     assert response.status_code == 200
 
