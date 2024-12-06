@@ -2,20 +2,19 @@ import pytest
 from flask import url_for
 from flask_jwt_extended import create_access_token
 from notice_service import app, db
+from notice_service import create_app
+
+
+def app():
+    app = create_app()
+    app.config['TESTING'] = True
+    app.config['SERVER_NAME'] = 'localhost.localdomain'
+    yield app
 
 
 @pytest.fixture
 def client(app):
     app.config['TESTING'] = True
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
-    app.config['JWT_SECRET_KEY'] = 'test-secret-key'
-    with app.test_client() as client:
-        with app.app_context():
-            db.create_all()
-        yield client
-        with app.app_context():
-            db.session.remove()
-            db.drop_all()
     return app.test_client()
 
 
