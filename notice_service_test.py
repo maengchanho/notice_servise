@@ -28,7 +28,7 @@ def client(app):
 @pytest.fixture
 def access_token():
     """Generate a valid JWT access token for testing."""
-    with app.app_context():
+    with flask_app.app_context():
         return create_access_token(identity="test_user")
 
 
