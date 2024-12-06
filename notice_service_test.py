@@ -6,7 +6,7 @@ from notice_service import app as flask_app, db
 
 @pytest.fixture
 @pytest.fixture
-def app():
+def flask_app():
     """Flask 앱 픽스처"""
     flask_app.config['TESTING'] = True
     flask_app.config['SERVER_NAME'] = 'localhost.localdomain'
@@ -20,9 +20,9 @@ def app():
 
 
 @pytest.fixture
-def client(flask_app):
+def client(app):
     """Flask 클라이언트 픽스처"""
-    return flask_app.test_client()
+    return app.test_client()
 
 
 @pytest.fixture
