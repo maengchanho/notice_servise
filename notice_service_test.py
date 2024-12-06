@@ -5,24 +5,24 @@ from notice_service import app as flask_app, db
 
 
 @pytest.fixture
+@pytest.fixture
 def app():
-    app.config['SERVER_NAME'] = 'localhost.localdomain'
-    return app
+    """Flask 앱 픽스처"""
+    flask_app.config['TESTING'] = True
+    flask_app.config['SERVER_NAME'] = 'localhost.localdomain'
+    flask_app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
+    flask_app.config['JWT_SECRET_KEY'] = 'test-secret-key'
+    with flask_app.app_context():
+        db.create_all()  # 데이터베이스 초기화
+        yield flask_app
+        db.session.remove()
+        db.drop_all()  # 테스트 후 데이터베이스 삭제
 
 
 @pytest.fixture
-def client():
-    flask_app.config['TESTING'] = True
-    flask_app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
-    flask_app.config['JWT_SECRET_KEY'] = 'test-secret-key'
-    with flask_app.test_client() as client:
-        with flask_app.app_context():
-            db.create_all()
-        yield client
-        with flask_app.app_context():
-            db.session.remove()
-            db.drop_all()
-    return flask_app.test_client()
+def client(app):
+    """Flask 클라이언트 픽스처"""
+    return app.test_client()
 
 
 @pytest.fixture
