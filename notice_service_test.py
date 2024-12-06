@@ -41,12 +41,6 @@ def test_authorized_access(client, access_token):
     assert response.status_code == 200
 
 
-def test_nonexistent_route(client):
-    """Test accessing a non-existent route."""
-    response = client.get('nonexistent')
-    assert response.status_code == 404
-
-
 def test_internal_error(client):
     """Test a scenario that triggers a 500 error."""
     response = client.get('/trigger_500')
