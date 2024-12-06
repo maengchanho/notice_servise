@@ -5,6 +5,7 @@ from notice_service import app, db
 from notice_service import create_app
 
 
+@pytest.fixture
 def app():
     app = create_app()
     app.config['TESTING'] = True
@@ -13,7 +14,16 @@ def app():
 
 
 @pytest.fixture
-def client(app):
+def client():
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
+    app.config['JWT_SECRET_KEY'] = 'test-secret-key'
+    with app.test_client() as client:
+        with app.app_context():
+            db.create_all()
+        yield client
+        with app.app_context():
+            db.session.remove()
+            db.drop_all()
     return app.test_client()
 
 
