@@ -6,13 +6,13 @@ from notice_service import app, db
 
 @pytest.fixture
 def app():
-    app.config['TESTING'] = True
     app.config['SERVER_NAME'] = 'localhost.localdomain'
     return app
 
 
 @pytest.fixture
 def client():
+    app.config['TESTING'] = True
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
     app.config['JWT_SECRET_KEY'] = 'test-secret-key'
     with app.test_client() as client:
