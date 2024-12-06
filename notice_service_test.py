@@ -1,7 +1,8 @@
 import pytest
 from flask import url_for
 from flask_jwt_extended import create_access_token
-from notice_service import app, db, create_app
+from notice_service import app, db
+from notice_service import create_app
 
 
 @pytest.fixture
