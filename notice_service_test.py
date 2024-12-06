@@ -2,15 +2,6 @@ import pytest
 from flask import url_for
 from flask_jwt_extended import create_access_token
 from notice_service import app, db
-from notice_service import create_app
-
-
-@pytest.fixture
-def app():
-    app = create_app()
-    app.config['TESTING'] = True
-    app.config['SERVER_NAME'] = 'localhost.localdomain'
-    return app
 
 
 @pytest.fixture
