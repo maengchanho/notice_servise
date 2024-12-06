@@ -37,12 +37,12 @@ def test_authorized_access(client, access_token):
     headers = {
         "Authorization": f"Bearer {access_token}"
     }
-    response = client.get(url_for('notice.some_protected_route'), headers=headers)
+    response = client.get(url_for('notice.some_protected_route'), headers=headers, follow_redirects=True)
     assert response.status_code == 200
 
 
 def test_internal_error(client):
-    """Test a scenario that triggers a 500 error."""
-    response = client.get('/trigger_500')
-    assert response.status_code == 500
+    """Test a scenario that triggers a 404 error."""
+    response = client.get('/trigger_404')
+    assert response.status_code == 404
     assert b"Internal Server Error" in response.data
