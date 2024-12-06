@@ -20,9 +20,9 @@ def app():
 
 
 @pytest.fixture
-def client(app):
+def client(flask_app):
     """Flask 클라이언트 픽스처"""
-    return app.test_client()
+    return flask_app.test_client()
 
 
 @pytest.fixture
