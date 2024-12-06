@@ -27,7 +27,8 @@ def access_token():
 
 def test_unauthorized_access(client):
     """Test accesing a protected route without a JWT."""
-    response = client.get(url_for('notice.some_protected_route'))
+    with client.application_app.context():
+        response = client.get(url_for('notice.some_protected_route'))
     assert response.status_code == 401
     assert "로그인이 필요한 서비스입니다." in response.data('utf-8')
 
@@ -37,12 +38,13 @@ def test_authorized_access(client, access_token):
     headers = {
         "Authorization": f"Bearer {access_token}"
     }
-    response = client.get(url_for('notice.some_protected_route'), headers=headers, follow_redirects=True)
+    with client.application_app.context():
+        response = client.get(url_for('notice.some_protected_route'), headers=headers, follow_redirects=True)
     assert response.status_code == 200
 
 
 def test_internal_error(client):
-    """Test a scenario that triggers a 404 error."""
-    response = client.get('/trigger_404')
-    assert response.status_code == 404
+    """Test a scenario that triggers a 500 error."""
+    response = client.get('/trigger_500')
+    assert response.status_code == 500
     assert b"Internal Server Error" in response.data
