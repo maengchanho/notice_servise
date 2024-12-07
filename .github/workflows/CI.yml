@@ -31,6 +31,9 @@ jobs:
         pip install flake8
         flake8 notice_service.py models.py config.py
 
+    - name: Debug .env file
+      run: cat .env
+
     - name: Run test for all services
       run: |
         pip install pytest

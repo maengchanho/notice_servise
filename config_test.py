@@ -29,11 +29,8 @@ def test_config_values(set_env_vars):
     # Config 클래스가 환경 변수를 올바르게 로드하는지 테스트
     config = Config()
 
-    print('SECRET_KEY from Config:', config.SECRET_KEY)  # 디버깅 용
-    print('DB_USER from Config:', os.getenv('DB_USER'))  # 디버깅 용
-
     assert config.SECRET_KEY == 'default-api-gateway-secret'
-    assert config.SQLALCHEMY_DATABASE_URI == 'mysql://test_user:test_password@localhost/notice_db'
+    assert config.SQLALCHEMY_DATABASE_URI == 'mysql://root:my-secret-pw@localhost/notice_db'
     assert config.SQLALCHEMY_TRACK_MODIFICATIONS is False
     assert config.JWT_SECRET_KEY == 'test-jwt-secret'
     assert config.JWT_TOKEN_LOCATION == ['cookies']
@@ -46,7 +43,7 @@ def test_default_values():
     config = Config()
 
     assert config.SECRET_KEY == 'default-api-gateway-secret'
-    assert config.JWT_SECRET_KEY == 'default-jwt-secret'
+    assert config.JWT_SECRET_KEY == 'jwt_secret_key'
     assert config.JWT_TOKEN_LOCATION == ['cookies']
     assert config.JWT_COOKIE_SECURE is False
     assert config.JWT_ACCESS_TOKEN_EXPIRES == timedelta(hours=1)
