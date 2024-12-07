@@ -11,7 +11,7 @@ def set_env_vars():
     os.environ['DB_USER'] = 'test_user'
     os.environ['DB_PASSWORD'] = 'test_password'
     os.environ['DB_HOST'] = 'localhost'
-    os.environ['JWT_SECET_KEY'] = 'test-jwt-secret'
+    os.environ['JWT_SECRET_KEY'] = 'test-jwt-secret'
     yield
     # 테스트 후 환경 변수 제거
     del os.environ['API_GATEWAY_SECRET_KEY']
