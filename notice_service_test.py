@@ -25,8 +25,11 @@ def access_token(client):
 def test_notice_login_redirect(client):
     headers = {"Content-Type": "application/json", "Accept": "application/json"}
     response = client.get('/notice/news')
-    assert response.status_code == 404
+    assert response.status_code == 401
+    json_data = response.get_json()
     error_message = response.get_json()["error"]
+    assert json_data is not None, "401 응답 시 JSON 본문을 기대합니다."
+    assert "error" in json_data, "JSON 응답에 'error' 키가 없습니다."
     assert "로그인이 필요한 서비스입니다." in error_message
 
 
