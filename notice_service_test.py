@@ -5,7 +5,6 @@ from notice_service import app as flask_app, db
 
 
 @pytest.fixture
-@pytest.fixture
 def flask_app():
     """Flask 앱 픽스처"""
     flask_app.config['TESTING'] = True
