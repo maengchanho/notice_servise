@@ -29,6 +29,9 @@ def test_config_values(set_env_vars):
     # Config 클래스가 환경 변수를 올바르게 로드하는지 테스트
     config = Config()
 
+    print('SECRET_KEY from Config:', config.SECRET_KEY)  # 디버깅 용
+    print('DB_USER from Config:', os.getenv('DB_USER'))  # 디버깅 용
+
     assert config.SECRET_KEY == 'test-api-gateway-secret'
     assert config.SQLALCHEMY_DATABASE_URI == 'mysql://test_user:test_password@localhost/notice_db'
     assert config.SQLALCHEMY_TRACK_MODIFICATIONS is False
