@@ -16,8 +16,10 @@ def client():
 
 
 @pytest.fixture
-def access_token():
-    return create_access_token(identity="test_user")
+def access_token(client):
+    with client.application.app_context():
+        from flask_jwt_extended import create_access_token
+        return create_access_token(identity="test_user")
 
 
 def test_home_page(client):
@@ -25,15 +27,15 @@ def test_home_page(client):
     assert response.status_code == 200
 
 
-def test_protected_endpoint_without_jwt(client):
-    response = client.get('/protected-endpoint')
-    assert response.status_code == 401
-
-
 def test_protected_endpoint_with_jwt(client, access_token):
     headers = {"Authorization": f"Bearer {access_token}"}
-    response = client.get('/protected-endpoint', headers=headers)
+    response = client.get('/notice/protected-endpoint', headers=headers)
     assert response.status_code == 200
+
+
+def test_protected_endpoint_without_jwt(client):
+    response = client.get('/notice/protected-endpoint')
+    assert response.status_code == 401
 
 
 def test_notice_login_redirect(client):
