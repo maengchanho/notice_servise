@@ -37,4 +37,5 @@ jobs:
         pytest --disable-warnings
         pytest notice_service_test.py
         pytest models_test.py
+        pytest config_test.py
   
