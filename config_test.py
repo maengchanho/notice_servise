@@ -11,7 +11,7 @@ load_dotenv()
 @pytest.fixture
 def set_env_vars():
     # 환경 변수를 설정하는 fixture.
-    os.environ['API_GATEWAY_SECRET_KEY'] = 'test-api-gateway-secret'
+    os.environ['API_GATEWAY_SECRET_KEY'] = 'default-api-gateway-secret'
     os.environ['DB_USER'] = 'test_user'
     os.environ['DB_PASSWORD'] = 'test_password'
     os.environ['DB_HOST'] = 'localhost'
@@ -32,7 +32,7 @@ def test_config_values(set_env_vars):
     print('SECRET_KEY from Config:', config.SECRET_KEY)  # 디버깅 용
     print('DB_USER from Config:', os.getenv('DB_USER'))  # 디버깅 용
 
-    assert config.SECRET_KEY == 'test-api-gateway-secret'
+    assert config.SECRET_KEY == 'default-api-gateway-secret'
     assert config.SQLALCHEMY_DATABASE_URI == 'mysql://test_user:test_password@localhost/notice_db'
     assert config.SQLALCHEMY_TRACK_MODIFICATIONS is False
     assert config.JWT_SECRET_KEY == 'test-jwt-secret'
