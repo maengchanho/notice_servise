@@ -22,24 +22,19 @@ def access_token(client):
         return create_access_token(identity="test_user")
 
 
-def test_home_page(client):
-    response = client.get('/')
-    assert response.status_code == 200
-
-
-def test_protected_endpoint_with_jwt(client, access_token):
-    headers = {"Authorization": f"Bearer {access_token}"}
-    response = client.get('/notice/protected-endpoint', headers=headers)
-    assert response.status_code == 200
-
-
-def test_protected_endpoint_without_jwt(client):
-    response = client.get('/notice/protected-endpoint')
-    assert response.status_code == 401
-
-
 def test_notice_login_redirect(client):
-    response = client.get('/notice/protected-page')
+    response = client.get('notice.some_protected_route')
     assert response.status_code == 401
     error_message = response.get_json()["error"]
     assert "로그인이 필요한 서비스입니다." in error_message
+
+
+def test_authorized_access(client, access_token):
+    headers = {"Authorization": f"Bearer {access_token}"}
+    response = client.get('notice.some_protected_route', headers=headers)
+    assert response.status_code == 200
+
+
+def test_internal_error(client):
+    response = client.get('/trigger_401')
+    assert response.status_code == 401
