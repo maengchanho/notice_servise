@@ -34,6 +34,7 @@ jobs:
     - name: Run test for all services
       run: |
         pip install pytest
+        pip install python-dotenv
         pytest --disable-warnings
         pytest notice_service_test.py
         pytest models_test.py
