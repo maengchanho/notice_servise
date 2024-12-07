@@ -64,7 +64,7 @@ def test_update_notice(db_session):
     db_session.commit()
     # 업데이트 된 데이터 확인
     updated_notice = Notice.query.filter_by(title="Update Test").first()
-    assert updated_notice.content == "Updated content"
+    assert updated_notice.content.lower() == "Updated content"
 
 
 def test_delete_notice(db_session):
