@@ -41,4 +41,5 @@ def test_protected_endpoint_without_jwt(client):
 def test_notice_login_redirect(client):
     response = client.get('/notice/protected-page')
     assert response.status_code == 401
-    assert "로그인이 필요한 서비스입니다." in response.get_json()["error"]
+    error_message = response.get_json()["error"]
+    assert "로그인이 필요한 서비스입니다." in error_message
