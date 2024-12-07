@@ -31,6 +31,16 @@ jobs:
         pip install flake8
         flake8 notice_service.py models.py config.py
 
+    - name: Set environment variables from secrets
+      env:
+        NOTICE_SERVICE_SECRET_KEY: ${{ secrets.NOTICE_SERVICE_SECRET_KEY }}
+        DB_USER: ${{ secrets.DB_USER }}
+        DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        DB_HOST: ${{ secrets.DB_HOST }}
+        JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+        DB_NAME: ${{ secrets.DB_NAME }}
+      run: pytest
+
     - name: Run test for all services
       run: |
         pip install pytest
