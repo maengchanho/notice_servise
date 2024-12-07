@@ -21,7 +21,7 @@ def set_env_vars():
     del os.environ['JWT_SECRET_KEY']
 
 
-def test_config_valuese(set_env_vars):
+def test_config_values(set_env_vars):
     # Config 클래스가 환경 변수를 올바르게 로드하는지 테스트
     config = Config()
 
