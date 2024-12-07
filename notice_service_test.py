@@ -22,15 +22,14 @@ def access_token(client):
         return create_access_token(identity="test_user")
 
 
-def test_notice_login_redirect(client):
+def test_unauthorized_access_returns_401(client):
     headers = {"Content-Type": "application/json", "Accept": "application/json"}
     response = client.get('/', headers=headers)
-    assert response.status_code == 401
+    assert response.status_code == 401, f"Expected 401, got {response.status_code}"
     json_data = response.get_json()
-    error_message = response.get_json()["error"]
-    assert json_data is not None, "401 응답 시 JSON 본문을 기대합니다."
-    assert "error" in json_data, "JSON 응답에 'error' 키가 없습니다."
-    assert "로그인이 필요한 서비스입니다." in error_message
+    assert json_data is not None, "Expected a JSON response."
+    assert "error" in json_data, "Expected 'error' key in the JSON response."
+    assert "로그인이 필요한 서비스입니다." in json_data["error"], "Expected the error message in the response"
 
 
 def test_authorized_access(client, access_token):
