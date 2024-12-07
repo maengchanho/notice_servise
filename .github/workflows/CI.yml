@@ -29,11 +29,12 @@ jobs:
     - name: Run lint for all services
       run: |
         pip install flake8
-        flake8 notice_service.py
+        flake8 notice_service.py models.py config.py
 
     - name: Run test for all services
       run: |
         pip install pytest
         pytest --disable-warnings
         pytest notice_service_test.py
+        pytest models_test.py
   
