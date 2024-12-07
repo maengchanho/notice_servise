@@ -2,6 +2,10 @@ import os
 from datetime import timedelta
 import pytest
 from config import Config
+from dotenv import load_dotenv
+
+
+load_dotenv()
 
 
 @pytest.fixture
