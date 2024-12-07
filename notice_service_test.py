@@ -24,7 +24,7 @@ def access_token(client):
 
 def test_notice_login_redirect(client):
     headers = {"Content-Type": "application/json", "Accept": "application/json"}
-    response = client.get('/notice.news')
+    response = client.get('/notice/')
     assert response.status_code == 401
     json_data = response.get_json()
     error_message = response.get_json()["error"]
