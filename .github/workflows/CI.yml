@@ -23,8 +23,6 @@ jobs:
 
     - name: Install dependencies
       run: |
-        pip install pytest
-        pip install python-dotenv
         python -m pip install --upgrade pip
         pip install -r ./requirements.txt
 
@@ -33,18 +31,10 @@ jobs:
         pip install flake8
         flake8 notice_service.py models.py config.py
 
-    - name: Set environment variables from secrets
-      run: pytest
-      env:
-        NOTICE_SERVICE_SECRET_KEY: ${{ secrets.NOTICE_SERVICE_SECRET_KEY }}
-        DB_USER: ${{ secrets.DB_USER }}
-        DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-        DB_HOST: ${{ secrets.DB_HOST }}
-        JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
-        DB_NAME: ${{ secrets.DB_NAME }}
-
     - name: Run test for all services
       run: |
+        pip install pytest
+        pip install python-dotenv
         pytest --disable-warnings
         pytest notice_service_test.py
         pytest models_test.py
