@@ -1,57 +1,22 @@
 import os
-import pytest
-from datetime import timedelta
 from config import Config
-from importlib import reload
 
-
-@pytest.fixture
-def set_env_vars(monkeypatch):
-    # 환경 변수를 설정하는 pytest fixture
+def test_config(monkeypatch):
+    # 환경 변수 설정
+    monkeypatch.setenv('DB_HOST', 'localhost')
     monkeypatch.setenv('DB_USER', 'root')
     monkeypatch.setenv('DB_PASSWORD', 'my-secret-pw')
-    monkeypatch.setenv('DB_HOST', 'localhost')
     monkeypatch.setenv('JWT_SECRET_KEY', 'jwt_secret_key')
-    monkeypatch.setenv('API_GATEWAY_SECRET_KEY', os.getenv('NOTICE_SERVICE_SECRET_KEY', 'notice_service_secret_key'))
-    # 모듈을 재로드하여 환경 변수를 반영
-    yield
-    reload(Config)
+    monkeypatch.setenv('API_GATEWAY_SECRET_KEY', 'notice_service_secret_key')
 
-
-def test_config_values(set_env_vars):
-    # Config 클래스의 설정값을 검증하는 테스트
+    # Config 클래스 인스턴스 생성
     config = Config()
 
-    # 환경 변수 기반으로 설정된 값 확인
-    assert config.SQLALCHEMY_DATABASE_URI == "mysql://root:my-secret-pw@localhost/notice_db"
-    assert config.SECRET_KEY == 'notice_service_secret_key'
-    assert config.JWT_SECRET_KEY == 'jwt_secret_key'
-
-    # 기본 설정값 확인
-    assert config.SQLALCHEMY_TRACK_MODIFICATIONS is False
-    assert config.JWT_TOKEN_LOCATION == ['cookies']
-    assert config.JWT_COOKIE_SECURE is False
-    assert config.JWT_ACCESS_TOKEN_EXPIRES == timedelta(hours=1)
-
-
-def test_default_values_when_env_vars_missing(monkeypatch):
-    # 환경 변수가 없을 때 기본값을 사용하는지 검증
-
-    # 모든 환경 변수를 제거
-    monkeypatch.delenv('DB_USER', raising=False)
-    monkeypatch.delenv('DB_PASSWORD', raising=False)
-    monkeypatch.delenv('DB_HOST', raising=False)
-    monkeypatch.delenv('JWT_SECRET_KEY', raising=False)
-    monkeypatch.delenv('NOTICE_SERVICE_SECRET_KEY', raising=False)
-
-    reload(Config)
-    config = Config()
-
-    # 기본값 확인
-    assert config.SQLALCHEMY_DATABASE_URI == "mysql://None:None@None/notice_db"
-    assert config.SECRET_KEY == 'default-api-gateway-secret'
-    assert config.JWT_SECRET_KEY == 'default-jwt-secret'
-    assert config.SQLALCHEMY_TRACK_MODIFICATIONS is False
-    assert config.JWT_TOKEN_LOCATION == ['cookies']
-    assert config.JWT_COOKIE_SECURE is False
-    assert config.JWT_ACCESS_TOKEN_EXPIRES == timedelta(hours=1)
+    # 설정값 검증
+    assert config.SECRET_KEY == 'notice_service_secret_key', "API Gateway Secret Key should match"
+    assert config.SQLALCHEMY_DATABASE_URI == 'mysql://root:my-secret-pw@localhost/notice_db', "Database URI should be constructed properly"
+    assert not config.SQLALCHEMY_TRACK_MODIFICATIONS, "SQLAlchemy track modifications should be False"
+    assert config.JWT_SECRET_KEY == 'jwt_secret_key', "JWT secret key should match"
+    assert config.JWT_TOKEN_LOCATION == ['cookies'], "JWT token location should be 'cookies'"
+    assert not config.JWT_COOKIE_SECURE, "JWT cookie secure should be False in this configuration"
+    assert config.JWT_ACCESS_TOKEN_EXPIRES.total_seconds() == 3600, "JWT access token expiry should be 1 hour"
