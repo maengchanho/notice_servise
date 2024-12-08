@@ -56,7 +56,7 @@ jobs:
     - name: Build and Push Docker Image
       run: |
         IMAGE_NAME=ghcr.io/${{ secrets.GHCR_USERNAME }}/notice_service:latest
-        docker build -t $IMAGE_NAME ./notice_service
+        docker build -t $IMAGE_NAME .
         docker push $IMAGE_NAME
 
   deploy:
