@@ -7,7 +7,7 @@ spec:
     app: notice_service
   ports:
     - protocol: TCP
-      port: 80
+      port: 5004
       targetPort: 5004
       nodePort: 30011
   type: NodePort
