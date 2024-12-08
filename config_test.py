@@ -2,19 +2,20 @@ import os
 import pytest
 from datetime import timedelta
 from config import Config
-from dotenv import load_dotenv
+from importlib import reload
 
 
 @pytest.fixture
 def set_env_vars(monkeypatch):
-    """.env 파일에서 환경 변수를 로드하고 덮어쓰기"""
-    load_dotenv()  # .env 파일 로드
-    monkeypatch.setenv('API_GATEWAY_SECRET_KEY', os.getenv('NOTICE_SERVICE_SECRET_KEY', 'default-api-gateway-secret'))
-    monkeypatch.setenv('DB_USER', os.getenv('DB_USER', 'root'))
-    monkeypatch.setenv('DB_PASSWORD', os.getenv('DB_PASSWORD', 'my-secret-pw'))
-    monkeypatch.setenv('DB_HOST', os.getenv('DB_HOST', 'localhost'))
-    monkeypatch.setenv('JWT_SECRET_KEY', os.getenv('JWT_SECRET_KEY', 'jwt_secret_key'))
+    # 환경 변수를 설정하는 pytest fixture
+    monkeypatch.setenv('DB_USER', 'root')
+    monkeypatch.setenv('DB_PASSWORD', 'my-secret-pw')
+    monkeypatch.setenv('DB_HOST', 'localhost')
+    monkeypatch.setenv('JWT_SECRET_KEY', 'jwt_secret_key')
+    monkeypatch.setenv('API_GATEWAY_SECRET_KEY', os.getenv('NOTICE_SERVICE_SECRET_KEY', 'notice_service_secret_key'))
+    # 모듈을 재로드하여 환경 변수를 반영
     yield
+    reload(Config)
 
 
 def test_config_values(set_env_vars):
@@ -43,6 +44,7 @@ def test_default_values_when_env_vars_missing(monkeypatch):
     monkeypatch.delenv('JWT_SECRET_KEY', raising=False)
     monkeypatch.delenv('NOTICE_SERVICE_SECRET_KEY', raising=False)
 
+    reload(Config)
     config = Config()
 
     # 기본값 확인
