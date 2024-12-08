@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: notice_service
+spec:
+  selector:
+    app: notice_service
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5004
+      nodePort: 30001
+  type: NodePort

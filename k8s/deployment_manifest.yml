@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notice_service_container
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: notice_service
+  template:
+    metadata:
+      labels:
+        app: notice_service
+    spec:
+      containers:
+      - name: notice_service_container
+        image: ghcr.io/maengchanho/notice-service:latest
+        ports:
+        - containerPort: 5004
