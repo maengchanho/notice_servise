@@ -17,7 +17,7 @@ def set_env_vars(monkeypatch):
 
 def test_config_values(set_env_vars):
     # Config 클래스의 설정값을 검증하는 테스트
-    config = Config
+    config = Config()
 
     # 환경 변수 기반으로 설정된 값 확인
     assert config.SQLALCHEMY_DATABASE_URI == "mysql://root:my-secret-pw@localhost/notice_db"
@@ -38,8 +38,8 @@ def test_default_values_when_env_vars_missing(monkeypatch):
     monkeypatch.delenv('DB_USER', raising=False)
     monkeypatch.delenv('DB_PASSWORD', raising=False)
     monkeypatch.delenv('DB_HOST', raising=False)
-    monkeypatch.delenv('DB_SECRET_KEY', raising=False)
-    monkeypatch.delenv('DB_API_GATEWY_SECRET_KEY', raising=False)
+    monkeypatch.delenv('JWT_SECRET_KEY', raising=False)
+    monkeypatch.delenv('API_GATEWY_SECRET_KEY', raising=False)
 
     config = Config
 
