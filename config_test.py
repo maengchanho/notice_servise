@@ -4,28 +4,17 @@ from datetime import timedelta
 from config import Config
 from dotenv import load_dotenv
 
-load_dotenv()
-
 
 @pytest.fixture
 def set_env_vars(monkeypatch):
-    """환경 변수를 설정하는 pytest fixture"""
-    # NOTICE_SERVICE_SECRET_KEY를 API_GATEWAY_SECRET_KEY로 매핑
-    os.environ['DB_USER'] = 'root'
-    os.environ['DB_PASSWORD'] = 'my-secret-pw'
-    os.environ['DB_HOST'] = 'localhost'
-    os.environ['JWT_SECRET_KEY'] = 'jwt_secret_key'
-    os.environ['API_GATEWAY_SECRET_KEY'] = 'notice_service_secret_key'
+    """.env 파일에서 환경 변수를 로드하고 덮어쓰기"""
+    load_dotenv()  # .env 파일 로드
+    monkeypatch.setenv('API_GATEWAY_SECRET_KEY', os.getenv('NOTICE_SERVICE_SECRET_KEY', 'default-api-gateway-secret'))
+    monkeypatch.setenv('DB_USER', os.getenv('DB_USER', 'root'))
+    monkeypatch.setenv('DB_PASSWORD', os.getenv('DB_PASSWORD', 'my-secret-pw'))
+    monkeypatch.setenv('DB_HOST', os.getenv('DB_HOST', 'localhost'))
+    monkeypatch.setenv('JWT_SECRET_KEY', os.getenv('JWT_SECRET_KEY', 'jwt_secret_key'))
     yield
-
-
-def test_env_vars_are_set():
-    # 환경 변수가 올바르게 설정되었는지 확인
-    assert os.getenv('API_GATEWAY_SECRET_KEY') == 'notice_service_secret_key'
-    assert os.getenv('DB_USER') == 'root'
-    assert os.getenv('DB_PASSWORD') == 'my-secret-pw'
-    assert os.getenv('DB_HOST') == 'localhost'
-    assert os.getenv('JWT_SECRET_KEY') == 'jwt_secret_key'
 
 
 def test_config_values(set_env_vars):
