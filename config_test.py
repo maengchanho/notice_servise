@@ -2,20 +2,19 @@ import os
 import pytest
 from datetime import timedelta
 from config import Config
-from dotenv import load_dotenv
-
-
-load_dotenv()
+from dotenv import dotenv_values
 
 
 @pytest.fixture
 def set_env_vars(monkeypatch):
     # 환경 변수를 설정하는 pytest fixture
-    monkeypatch.setenv('DB_USER', 'root')
-    monkeypatch.setenv('DB_PASSWORD', 'my-secret-pw')
-    monkeypatch.setenv('DB_HOST', 'localhost')
-    monkeypatch.setenv('JWT_SECRET_KEY', 'jwt_secret_key')
-    monkeypatch.setenv('API_GATEWAY_SECRET_KEY', os.getenv('NOTICE_SERVICE_SECRET_KEY', 'default-api-gateway-secret'))
+    env_vars = dotenv_values(".env")
+    monkeypatch.setenv('DB_USER', env_vars.get('DB_USER', 'default_user'))
+    monkeypatch.setenv('DB_PASSWORD', env_vars.get('DB_PASSWORD', 'default_password'))
+    monkeypatch.setenv('DB_HOST', env_vars.get('DB_HOST', 'default_host'))
+    monkeypatch.setenv('JWT_SECRET_KEY', env_vars.get('JWT_SECRET_KEY', 'default_jwt_secret'))
+    # NOTICE_SERVICE_SECRET_KEY를 API_GATEWAY_SECRET_KEY로 매핑
+    monkeypatch.setenv('API_GATEWAY_SECRET_KEY', env_vars.get('NOTICE_SERVICE_SECRET_KEY', 'default-api-gateway-secret'))
     yield
 
 
