@@ -1,7 +1,11 @@
 import os
 from config import Config
+from dotenv import load_dotenv
+
 
 def test_config(monkeypatch):
+    load_dotenv()
+
     # 환경 변수 설정
     monkeypatch.setenv('DB_HOST', 'localhost')
     monkeypatch.setenv('DB_USER', 'root')
