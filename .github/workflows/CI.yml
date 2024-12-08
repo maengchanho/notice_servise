@@ -65,8 +65,14 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
+    needs: build-and-push-docker-image
+    
     steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
     - name: Deploy using docker-compose
       run: |
+        cd ./docker-compose.yaml
         docker compose pull
         docker compose up -d
