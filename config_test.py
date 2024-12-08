@@ -41,7 +41,7 @@ def test_default_values_when_env_vars_missing(monkeypatch):
     monkeypatch.delenv('JWT_SECRET_KEY', raising=False)
     monkeypatch.delenv('API_GATEWAY_SECRET_KEY', raising=False)
 
-    config = Config
+    config = Config()
 
     # 기본값 확인
     assert config.SQLALCHEMY_DATABASE_URI == "mysql://None:None@None/notice_db"
