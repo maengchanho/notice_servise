@@ -39,7 +39,7 @@ def test_default_values_when_env_vars_missing(monkeypatch):
     monkeypatch.delenv('DB_PASSWORD', raising=False)
     monkeypatch.delenv('DB_HOST', raising=False)
     monkeypatch.delenv('JWT_SECRET_KEY', raising=False)
-    monkeypatch.delenv('API_GATEWY_SECRET_KEY', raising=False)
+    monkeypatch.delenv('API_GATEWAY_SECRET_KEY', raising=False)
 
     config = Config
 
