@@ -15,7 +15,7 @@ def set_env_vars(monkeypatch):
     monkeypatch.setenv('DB_PASSWORD', 'my-secret-pw')
     monkeypatch.setenv('DB_HOST', 'localhost')
     monkeypatch.setenv('JWT_SECRET_KEY', 'jwt_secret_key')
-    monkeypatch.setenv('API_GATEWAY_SECRET_KEY', 'notice_service_secret_key')
+    monkeypatch.setenv('API_GATEWAY_SECRET_KEY', os.getenv('NOTICE_SERVICE_SECRET_KEY', 'default-api-gateway-secret'))
     yield
 
 
