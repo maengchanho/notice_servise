@@ -9,5 +9,5 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 5004
-      nodePort: 30001
+      nodePort: 30011
   type: NodePort
