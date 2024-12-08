@@ -7,6 +7,7 @@ from models import db, Notice
 
 @pytest.fixture
 def app():
+    # Flask 애플리케이션 테스트 설정
     app = Flask(__name__)
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -22,11 +23,13 @@ def app():
 
 @pytest.fixture
 def client(app):
+    # Flask 테스트 클라이언트 설정
     return app.test_client()
 
 
 @pytest.fixture
 def db_session(app):
+    # 데이터베이스 세션 설정
     with app.app_context():
         yield db.session
 
