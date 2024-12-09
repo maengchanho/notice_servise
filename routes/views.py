@@ -11,19 +11,19 @@ logger = logging.getLogger(__name__)
 @jwt_required()
 def home():
     try:
-        verify_jwt_in_request()
+        #verify_jwt_in_request()
         return redirect(url_for('notice.news'))
     except Exception as e:
         return jsonify({"error": "로그인이 필요한 서비스입니다.", "redirect": url_for('notice.login', _external=True)}), 401
 
 @notice.route('/news')
-@jwt_required()
+#@jwt_required()
 def news():
     notices = Notice.query.order_by(Notice.date.desc()).all()
     return render_template('news_main.html', notices=notices)
 
 @notice.route('/news/<int:notice_id>')
-@jwt_required()
+#@jwt_required()
 def news_item(notice_id):
     notice = Notice.query.get_or_404(notice_id)
     return render_template('news_item.html', notice=notice)

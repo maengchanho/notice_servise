@@ -66,3 +66,7 @@ class TestNoticeService(unittest.TestCase):
             self.assertEqual(data[0]['title'], 'Holiday Announcement')
             self.assertEqual(data[1]['title'], 'Notice 1')
             self.assertEqual(data[2]['title'], 'Notice 2')
+
+
+if __name__ == '__main__':
+    unittest.main()
