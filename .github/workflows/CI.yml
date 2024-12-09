@@ -31,7 +31,7 @@ jobs:
         pip install -r ./requirements.txt
 
     - name: Run test for all services
-      run: python -m unittest notice_service.py .
+      run: python -m unittest notice_service_test.py .
   
     - name: Checkout repository
       uses: actions/checkout@v3
