@@ -82,3 +82,85 @@ def test_delete_notice(db_session):
     # 데이터가 삭제되었는지 확인
     deleted_notice = Notice.query.filter_by(title="Delete Test").first()
     assert deleted_notice is None
+
+
+def test_notice_pagination(client, db_session):
+    # 테스트 데이터 여러 개 추가
+    for i in range(15):
+        notice = Notice(title=f"Notice {i+1}", content=f"Content {i+1}")
+        db_session.add(notice)
+    db_session.commit()
+    
+    # 페이지네이션 테스트 - 첫 번쨰 페이지
+    response = client.get('/notice?page=1&per_page=5')
+    assert response.status_code == 200
+    data = response.get_json()
+    assert len(data['notice']) = 5 # 5개의 공지사항이 반환
+    assert data['notice'][0]['title'] == "Notice 1"
+    
+    # 페이지네이션 테스트 - 두 번쨰 페이지
+    response = client.get('/notice?page=1&per_page=5')
+    assert response.status_code == 200
+    data = response.get_json()
+    assert len(data['notice']) = 5 # 5개의 공지사항이 반환
+    assert data['notice'][0]['title'] == "Notice 6"
+    
+    # 페이지네이션 테스트 - 세 번쨰 페이지
+    response = client.get('/notice?page=1&per_page=5')
+    assert response.status_code == 200
+    data = response.get_json()
+    assert len(data['notice']) = 5 # 5개의 공지사항이 반환
+    assert data['notice'][0]['title'] == "Notice 11"
+    
+    # 페이지네이션 테스트 - 페이지 벗어난 경우
+    response = client.get('/notice?page=1&per_page=5')
+    assert response.status_code == 200
+    data = response.get_json()
+    assert len(data['notice']) == 0 # 더 이상 데이터가 없을 경우 빈 리스트 반환
+    
+
+def test_notice_detail(client, db_session):
+    # 테스트 데이터 추가
+    notice = Notice(titile="Detail Test", content="Detail Content")
+    db_session.add(notice)
+    db_session.commit()
+    
+    # 방금 추가된 공지사항 ID 확인
+    notice_id = notice.id
+    
+    # 상세 정보 요청
+    response = client.get(f'/notices/{notice_id}')
+    assert response.status_code == 200
+    
+    data = response.get_json()
+    assert data['title'] == "Detail Test"
+    assert data['content'] == "Detail Content"
+
+
+def test_pagination_navigation(client, db_session):
+    # 테스트 데이터 여러 개 추가
+    for i in range(12):
+        notice = Notice(title=f"Page Test {i+1}", content=f"Page Content {i+1}")
+        db_session.add(notice)
+    db_session.commit()
+
+    # 첫 번째 페이지 요청
+    response = client.get('/notices?page=1&per_page=5')
+    assert response.status_code == 200
+    data = response.get_json()
+    assert data['has_next'] is True  # 다음 페이지 존재
+    assert data['has_prev'] is False  # 이전 페이지 없음
+
+    # 두 번째 페이지 요청
+    response = client.get('/notices?page=2&per_page=5')
+    assert response.status_code == 200
+    data = response.get_json()
+    assert data['has_next'] is True
+    assert data['has_prev'] is True
+
+    # 마지막 페이지 요청
+    response = client.get('/notices?page=3&per_page=5')
+    assert response.status_code == 200
+    data = response.get_json()
+    assert data['has_next'] is False  # 다음 페이지 없음
+    assert data['has_prev'] is True   # 이전 페이지 존재
