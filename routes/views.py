@@ -8,7 +8,7 @@ from . import notice
 logger = logging.getLogger(__name__)
 
 @notice.route('/')
-@jwt_required()
+# @jwt_required()
 def home():
     try:
         #verify_jwt_in_request()
